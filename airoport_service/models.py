@@ -7,6 +7,10 @@ class Crew(models.Model):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
 
+    @property
+    def full_name(self):
+        return self.first_name + self.last_name
+
     def __str__(self):
         return self.first_name
 
@@ -27,9 +31,12 @@ class Airport(models.Model):
 
 
 class Route(models.Model):
-    source = models.ForeignKey(Airport, on_delete=models.CASCADE)
-    destination = models.ForeignKey(Airport, on_delete=models.CASCADE)
+    source = models.ForeignKey(Airport, on_delete=models.CASCADE, related_name="sources")
+    destination = models.ForeignKey(Airport, on_delete=models.CASCADE, related_name="destinations")
     distance = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.source} - {self.destination}"
 
 
 class Airplane(models.Model):
@@ -38,11 +45,15 @@ class Airplane(models.Model):
     seats_in_row = models.IntegerField()
     airplane_type = models.ForeignKey(AirplaneType, on_delete=models.CASCADE)
 
+    @property
+    def capacity(self):
+        return self.seats_in_row * self.rows
+
     class Meta:
-        ordering = ["-show_time"]
+        ordering = ["name"]
 
     def __str__(self):
-        return self.movie.title + " " + str(self.show_time)
+        return self.name
 
 
 class Order(models.Model):
@@ -60,7 +71,7 @@ class Order(models.Model):
 
 class Flight(models.Model):
     route = models.ForeignKey(Route, on_delete=models.CASCADE, related_name="flights")
-    airplane = models.ForeignKey(Airplane, on_delete=models.CASCADE)
+    airplane = models.ForeignKey(Airplane, on_delete=models.CASCADE, related_name="flights")
     departure_time = models.DateTimeField()
     arrival_time = models.DateTimeField()
     crew = models.ManyToManyField(Crew, related_name="flights")
