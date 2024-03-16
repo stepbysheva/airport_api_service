@@ -97,6 +97,7 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = "created_at", "tickets"
+        extra_kwargs = {"tickets": {"write_only": True}}
 
     def create(self, validated_data):
         tickets = validated_data.pop("tickets")
@@ -105,3 +106,11 @@ class OrderSerializer(serializers.ModelSerializer):
             new_ticket = Ticket.objects.create(**ticket)
             new_ticket.order = order
         return order
+
+
+class OrderDetailSerializer(serializers.ModelSerializer):
+    tickets = TicketSerializer
+
+    class Meta:
+        model = Order
+        fields = "created_at", "tickets"
