@@ -4,11 +4,11 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from airoport_service.models import Airplane, AirplaneType, Airport, Route, Crew, Flight, Order, Ticket
+from airoport_service.models import Airplane, AirplaneType, Airport, Route, Crew, Flight, Order
 from airoport_service.permissions import IFADMINORREADONLY
 from airoport_service.serializers import AirplaneListSerializer, AirplaneSerializer, AirplaneTypeSerializer, \
     AirportSerializer, RouteSerializer, RouteListSerializer, CrewSerializer, FlightSerializer, FlightListSerializer, \
-    FlightDetailSerializer, OrderSerializer, TicketSerializer, OrderDetailSerializer
+    FlightDetailSerializer, OrderSerializer, OrderDetailSerializer
 
 
 class DefaultPaginator(PageNumberPagination):
