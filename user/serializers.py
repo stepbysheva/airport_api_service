@@ -1,13 +1,16 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
+from airoport_service.serializers import OrderSerializer
 from user.models import UserModel
 
 
 class UserSerializer(serializers.ModelSerializer):
+    orders = OrderSerializer(read_only=True, many=True)
+
     class Meta:
         model = UserModel
-        fields = "email", "password", "is_staff"
+        fields = "email", "password", "is_staff", "orders"
         extra_kwargs = {"password": {"write_only": True}, "is_staff": {"read_only": True}}
 
     def create(self, validated_data):
