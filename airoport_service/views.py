@@ -5,6 +5,7 @@ from rest_framework.viewsets import ModelViewSet, GenericViewSet
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from airoport_service.models import Airplane, AirplaneType, Airport, Route, Crew, Flight, Order, Ticket
+from airoport_service.permissions import IFADMINORREADONLY
 from airoport_service.serializers import AirplaneListSerializer, AirplaneSerializer, AirplaneTypeSerializer, \
     AirportSerializer, RouteSerializer, RouteListSerializer, CrewSerializer, FlightSerializer, FlightListSerializer, \
     FlightDetailSerializer, OrderSerializer, TicketSerializer, OrderDetailSerializer
@@ -19,10 +20,11 @@ class AirplaneViewSet(ListCreateAPIView):
     queryset = Airplane.objects.all()
     serializer_class = AirplaneSerializer
     authentication_classes = (JWTAuthentication,)
+    permission_classes = (IFADMINORREADONLY, )
     pagination_class = DefaultPaginator
 
     def get_serializer_class(self):
-        if self.action == "list":
+        if self.request.method == "get":
             return AirplaneListSerializer
         return AirplaneSerializer
 
@@ -30,23 +32,28 @@ class AirplaneViewSet(ListCreateAPIView):
 class AirplaneTypeViewSet(ListCreateAPIView):
     queryset = AirplaneType.objects.all()
     serializer_class = AirplaneTypeSerializer
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = (IFADMINORREADONLY,)
     pagination_class = DefaultPaginator
 
 
 class AirportViewSet(ListCreateAPIView):
     queryset = Airport.objects.all()
     serializer_class = AirportSerializer
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = (IFADMINORREADONLY,)
     pagination_class = DefaultPaginator
 
 
-class RouteViewSet(GenericViewSet,
-                   ListCreateAPIView):
+class RouteViewSet(ListCreateAPIView):
     queryset = Route.objects.all()
     serializer_class = RouteSerializer
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = (IFADMINORREADONLY,)
     pagination_class = DefaultPaginator
 
     def get_serializer_class(self):
-        if self.action == "list":
+        if self.request.method == "get":
             return RouteListSerializer
         return RouteSerializer
 
@@ -54,12 +61,16 @@ class RouteViewSet(GenericViewSet,
 class CrewViewSet(ListCreateAPIView):
     queryset = Crew.objects.all()
     serializer_class = CrewSerializer
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = (IFADMINORREADONLY,)
     pagination_class = DefaultPaginator
 
 
 class FlightViewSet(ModelViewSet):
     queryset = Flight.objects.all()
     serializer_class = FlightSerializer
+    authentication_classes = (JWTAuthentication,)
+    permission_classes = (IFADMINORREADONLY,)
     pagination_class = DefaultPaginator
 
     def get_serializer_class(self):
