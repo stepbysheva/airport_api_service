@@ -16,6 +16,7 @@ class DefaultPaginator(PageNumberPagination):
     max_page_size = 100
 
 
+
 class AirplaneViewSet(ListCreateAPIView):
     queryset = Airplane.objects.all()
     serializer_class = AirplaneSerializer
@@ -79,6 +80,14 @@ class FlightViewSet(ModelViewSet):
         if self.action == "retrieve":
             return FlightDetailSerializer
         return FlightSerializer
+
+    def get_queryset(self):
+        if self.action == "list":
+            departure = self.request.query_params.get("departure")
+            if departure:
+                return self.queryset.filter(departure_time__date=departure)
+            return self.queryset
+        return self.queryset
 
 
 class OrderViewSet(mixins.CreateModelMixin,
