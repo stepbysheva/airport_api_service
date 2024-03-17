@@ -94,4 +94,3 @@ class Ticket(models.Model):
     class Meta:
         unique_together = ("flight", "row", "seat")
         ordering = ["row", "seat"]
-
