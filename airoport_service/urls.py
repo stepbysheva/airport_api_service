@@ -12,14 +12,13 @@ router.register("orders", OrderViewSet)
 
 
 urlpatterns = [
-    path("", include(router.urls)),
     path("airplanes/", AirplaneViewSet.as_view()),
     path("airplane_types/", AirplaneTypeViewSet.as_view()),
     path("airports/", AirportViewSet.as_view()),
     path("routes/", RouteViewSet.as_view()),
     path("crews/", CrewViewSet.as_view())
 
-]
+] + router.urls
 
 
 app_name = "airoport_service"
